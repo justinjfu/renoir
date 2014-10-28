@@ -1,5 +1,8 @@
-renoir
+The Renoir - Le robot de traçage
 ======
+
+![Renoir Image](http://www.ibiblio.org/wm/paint/auth/renoir/renoir.jpg)
+
 
 Tasks
 ------
