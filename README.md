@@ -6,11 +6,22 @@ The Renoir - Le robot de traçage
 
 Tasks
 ------
-* Vectors to robot actions
-* Image Vectorizer
+* (Hojo) Hardware
+  * Spring-loaded gripping thingy
+* (Sara) Vectors to robot actions
+  * Start with manually specified trajectories - Have baxter draw from a list of line segments
+    * Have an algorithm to specify in which order lines are drawn in
+    * Feed lines into MoveIt
+  * Have a hard-coded picture to world transformation
+* (Justin) Image Vectorizer 
+  * Converts bitmap images to a list of line segments
+
 * [Stretch] Paper tracking
-  * Corner detection
+  * Calculate picture frame to world frame transformation.
+  * Corner detection (we can use 3/4 AR tags)
   * Kalman Filter
+* [Stretch] Feedback
+  * Have Baxter know which lines are one the paper  
 
 
 Git Help
