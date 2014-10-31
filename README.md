@@ -43,6 +43,9 @@ Simple git usage
       * Equivalent to:
       * git fetch + git merge origin/master
   * Do your work
+  * Add 
+    * git add -A
+    * git add file_name
   * Commit
     * git commit -m "Your commit message"
     * If you made a mistake,
