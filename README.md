@@ -17,7 +17,7 @@ Tasks
   * Converts bitmap images to a list of line segments
 
 * [Stretch] Paper tracking
-  * Calculate picture frame to world frame transformation.
+  * Calculate picture frame to world frame transformation. This can be a service that publishes a picture-to-world transformation matrix.
   * Corner detection (we can use 3/4 AR tags)
   * Kalman Filter
 * [Stretch] Feedback
