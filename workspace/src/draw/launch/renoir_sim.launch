@@ -1,0 +1,5 @@
+<launch>
+    <node name="renoir/pic2world_node" pkg="pic2world" type="run_node.py" respawn="false" output="screen" />
+
+    #Insert draw node here
+</launch>
