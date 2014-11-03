@@ -9,6 +9,7 @@ import numpy as np
 class RobotState(object):
     def __init__(self):
         self.__subscribe()
+        self.is_hand_down = False
 
     def __subscribe(self):
         """
@@ -32,5 +33,11 @@ class RobotState(object):
         frame coordinates in Baxter's base frame
         """
         return self.pic2world_transform
+
+    def set_hand_down():
+        self.is_hand_down = True
+
+    def set_hand_up():
+        self.is_hand_down = False
 
 ROBOT_STATE = RobotState()
