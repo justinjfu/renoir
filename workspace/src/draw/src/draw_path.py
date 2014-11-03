@@ -10,12 +10,19 @@ def draw_line(linesegment):
 
 # raise hand 2 inches from current point
 def bring_up():
-    pass
+    #Bring hand up to a fixed position via MoveIt
+    
+    ROBOT_STATE.set_hand_up()
 
 # move hand to initial point to start drawing from
 def bring_down(target_point):
     if ROBOT_STATE.is_hand_down:
         raise RuntimeException("Robot hand already down! Need to call bring_up first")
+
+    #Bring hand down via MoveIt
+
+    ROBOT_STATE.set_hand_down()
+
 
 def in_order_plan(line_segments):
     """
