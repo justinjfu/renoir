@@ -1,0 +1,15 @@
+<launch>
+    <!-- TODO(Justin) Fill in correct marker dimension -->
+    <arg name="marker_size" default="4.4" />
+    <arg name="max_new_marker_error" default="0.08" />
+    <arg name="max_track_error" default="0.0" />
+
+    <arg name="cam_image_topic" default="/cam_topic" />
+    <arg name="cam_info_topic" default="/cam_info_topic" />    
+
+    <arg name="output_frame" default="/baxter_base_frame" />
+    <arg name="med_filt_size" default="5" />
+    <arg name="bundle_files" default="$(find pic2world)/bundles/paper.xml" />
+
+    <node name="ar_track_alvar" pkg="ar_track_alvar" type="findMarkerBundles" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame) $(arg med_filt_size) $(arg bundle_files)" />
+</launch>
