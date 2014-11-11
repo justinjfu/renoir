@@ -13,13 +13,12 @@ Tasks
     * Have an algorithm to specify in which order lines are drawn in
     * Feed lines into MoveIt
   * Have a hard-coded picture to world transformation
-* (Justin) Image Vectorizer 
-  * Converts bitmap images to a list of line segments
-
-* [Stretch] Paper tracking
+* (Justin) Paper tracking
   * Calculate picture frame to world frame transformation. This can be a service that publishes a picture-to-world transformation matrix.
   * Corner detection (we can use 3/4 AR tags)
   * Kalman Filter
+* [Stretch] (Justin) Image Vectorizer 
+  * Converts bitmap images to a list of line segments
 * [Stretch] Feedback
   * Have Baxter know which lines are one the paper  
 
