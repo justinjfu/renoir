@@ -4,22 +4,45 @@ from robot_state import ROBOT_STATE
 import numpy
 import rospy
 
-# use moveit to plan and move baxter arm
-def draw_line(linesegment):
-    pass
+def draw_line(line_segment):
+    """
+    Make baxter draw a line segment
+     
+    :param line_segment: A list of 2 points. Ex. [[x1, y1], [x2, y2]]
+    """
+    assert ROBOT_STATE.is_hand_down  #Make sure robot hand is down
+    assert len(line_segment) == 2
 
-# raise hand 2 inches from current point
+    start = line_segment[0]
+    end = line_segment[1]
+
+    #TODO interpolate between start and end
+    interpolated = []
+
+    #TODO Call pic2world on each interpolated point as baxter draws
+    #We do it here because
+    #Ex. pic2world(interpolated[i])
+
+
 def bring_up():
-    #Bring hand up to a fixed position via MoveIt
+    """
+    raise hand 2 inches from current point
+    """
+    #TODO(Hong): Bring hand up to a fixed position via MoveIt
     
     ROBOT_STATE.set_hand_up()
 
-# move hand to initial point to start drawing from
 def bring_down(target_point):
+    """
+    move hand to initial point to start drawing from
+
+    :param target_point: A 2D image frame point [x1, y1]
+    """
     if ROBOT_STATE.is_hand_down:
         raise RuntimeException("Robot hand already down! Need to call bring_up first")
 
-    #Bring hand down via MoveIt
+    #TODO(Hong): Bring hand down via MoveIt
+    target_point = pic2world(target_point)
 
     ROBOT_STATE.set_hand_down()
 
