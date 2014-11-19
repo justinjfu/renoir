@@ -80,10 +80,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES draw
-#  CATKIN_DEPENDS rospy std_msgs
-#  DEPENDS system_lib
+  # INCLUDE_DIRS include
+  # LIBRARIES draw
+  CATKIN_DEPENDS rospy std_msgs ar_track_alvar
+  # DEPENDS system_lib
 )
 
 ###########
