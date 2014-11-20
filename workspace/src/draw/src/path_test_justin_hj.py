@@ -47,7 +47,7 @@ def main():
     goal_1.pose.orientation.w = 0.0
 
     #Set the goal state to the pose you just defined
-    left__arm.set_pose_target(goal_1)
+    left_arm.set_pose_target(goal_1)
 
     #Set the start state for the left arm
     left_arm.set_start_state_to_current_state()
