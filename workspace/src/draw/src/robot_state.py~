@@ -11,9 +11,6 @@ class RobotState(object):
         self.__subscribe()
         self.is_hand_down = False
 
-    def __init_moveit(self):
-	
-
     def __subscribe(self):
         """
         Initialize all subscribers
