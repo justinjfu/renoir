@@ -70,7 +70,10 @@ def pic2world(single_point):
     to a 3D world coordinate
     """
     transform = ROBOT_STATE.getPic2World()
-    return transform.dot(single_point)
+    homog = np.array([single_point[0], single_point[1], 1])
+    homog = transform.dot(homog)
+    result = np.array([homog[0]/homog[2], homog[1]/homog[2]])
+    return result
 
 def pic2world_list(point_list):
     """
