@@ -24,7 +24,7 @@ class RobotState(object):
         pass
 
     def __pic2world_callback(self, msg):
-        self.pic2world_transform = msg
+        self.pic2world_transform = msg.data.reshape((3,3))
 
     def getPic2World(self):
         """
