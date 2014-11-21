@@ -2,14 +2,39 @@
 Maintains a global "Robot" variable that
 subscribes to various topics and records their values
 """
-
+import sys
 import rospy
 import numpy as np
+import moveit_commander
 
 class RobotState(object):
     def __init__(self):
         self.__subscribe()
         self.is_hand_down = False
+
+    def __init_moveit(self):
+	"""
+	"""
+    	#Initialize moveit_commander
+    	moveit_commander.roscpp_initialize(sys.argv)
+
+    	#Start a node
+    	rospy.init_node('moveit_node')
+    
+    	#Set up the left gripper
+    	left_gripper = baxter_gripper.Gripper('left')
+    
+    	#Calibrate the gripper
+    	print('Calibrating...')
+    	left_gripper.calibrate()
+    	rospy.sleep(2.0)
+	
+	#Initialize left arm
+	robot = moveit_commander.RobotCommander()
+	scene = moveit_commander.PlanningSceneInterface()
+	left_arm = moveit_commander.MoveGroupCommander('left_arm')
+	left_arm.set_planner_id('RRTConnectkConfigDefault')
+	left_arm.set_planning_time(10)
 
     def __subscribe(self):
         """
