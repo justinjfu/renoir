@@ -2,6 +2,37 @@ import moveit_commander
 from robot_state import ROBOT_STATE
 from moveit_msgs.msg import OrientationConstraint, Constraints
 from geometry_msgs.msg import PoseStamped
+import sys
+import rospy
+import numpy
+
+#testing?
+def main():
+    #Initialize moveit_commander
+    moveit_commander.roscpp_initialize(sys.argv)
+
+    #Start a node
+    rospy.init_node('moveit_node')
+    
+    #Set up the left gripper
+    left_gripper = baxter_gripper.Gripper('left')
+    
+    #Calibrate the gripper
+    print('Calibrating...')
+    left_gripper.calibrate()
+    rospy.sleep(2.0)
+	
+    #Initialize left arm
+    robot = moveit_commander.RobotCommander()
+    scene = moveit_commander.PlanningSceneInterface()
+    left_arm = moveit_commander.MoveGroupCommander('left_arm')
+    left_arm.set_planner_id('RRTConnectkConfigDefault')
+    left_arm.set_planning_time(10)
+
+    test1 = numpy.array([0.2,0.6,0.2])
+    test2 = numpy.array([0.6,0.4,0])
+    move_arm(test1,test2)
+#end?
 
 def move_arm(pos1,pos2):
     #Start pose ------------------------------------------------------
