@@ -23,5 +23,5 @@
 
     <node name="ar_track_alvar" pkg="ar_track_alvar" type="findMarkerBundlesNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)  $(arg bundle_files)" />
 
-    <node name="pic2world_node" pkg="pic2world" type="run_node.py" respawn="false" output="screen" />
+    <node name="pic2world_node" pkg="pic2world" type="run_node.py" respawn="false" output="screen" args="$(arg output_frame)"/>
 </launch>
