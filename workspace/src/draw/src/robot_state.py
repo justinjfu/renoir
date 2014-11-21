@@ -10,12 +10,17 @@ import moveit_commander
 class RobotState(object):
     def __init__(self):
         self.__subscribe()
+        self.__publish()
         self.is_hand_down = False
+        self.is_moveit_initialized = False
 
     def __init_moveit(self):
 	"""
 	"""
-    	#Initialize moveit_commander
+    	if (self.is_moveit_initialized):
+            return
+
+        #Initialize moveit_commander
     	moveit_commander.roscpp_initialize(sys.argv)
 
     	#Start a node
@@ -29,12 +34,15 @@ class RobotState(object):
     	left_gripper.calibrate()
     	rospy.sleep(2.0)
 	
-	#Initialize left arm
-	robot = moveit_commander.RobotCommander()
-	scene = moveit_commander.PlanningSceneInterface()
-	left_arm = moveit_commander.MoveGroupCommander('left_arm')
-	left_arm.set_planner_id('RRTConnectkConfigDefault')
-	left_arm.set_planning_time(10)
+    	#Initialize left arm
+    	self.robot = moveit_commander.RobotCommander()
+    	self.scene = moveit_commander.PlanningSceneInterface()
+    	self.left_arm = moveit_commander.MoveGroupCommander('left_arm')
+    	self.left_arm.set_planner_id('RRTConnectkConfigDefault')
+    	self.left_arm.set_planning_time(10)
+
+        #Set flag that its initialized
+        self.is_moveit_initialized = True
 
     def __subscribe(self):
         """
@@ -44,9 +52,14 @@ class RobotState(object):
 
     def __publish(self):
         """
-        Initialize all publishers. Empty for now
+        Initialize all publishers.
         """
-        pass
+        # Create DisplayTrajectory publishes trajectories for RVIZ
+        display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory)
+        # wait for RVIZ to visualize
+        print "============ Waiting for RVIZ..."
+        rospy.sleep(10)
+        print "============ RVIZ started"
 
     def __pic2world_callback(self, msg):
         self.pic2world_transform = msg.data.reshape((3,3))
