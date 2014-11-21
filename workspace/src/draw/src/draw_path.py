@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 
-from robot_state import ROBOT_STATE
+import sys
+import copy
+import math
 import numpy
 import rospy
+from robot_state import ROBOT_STATE
+import moveit_commander
+from robot_state import ROBOT_STATE
+from moveit_msgs.msg import OrientationConstraint, Constraints
+from geometry_msgs.msg import PoseStamped
 
 def draw_line(line_segment):
     """
@@ -13,16 +20,75 @@ def draw_line(line_segment):
     assert ROBOT_STATE.is_hand_down  #Make sure robot hand is down
     assert len(line_segment) == 2
 
-    start = line_segment[0]
-    end = line_segment[1]
+    wstart = pic2world(line_segment[0]) #Start and end coordinates in world frame 
+    wend = pic2world(line_segment[1])
 
-    #TODO interpolate between start and end
-    interpolated = []
+    # Initialize moveit if not already initialized
+    if (!ROBOT_STATE.is_moveit_initialized):
+        ROBOT_STATE.__init_moveit()
 
-    #TODO Call pic2world on each interpolated point as baxter draws
-    #We do it here because
-    #Ex. pic2world(interpolated[i])
+    move_to_start(world_start)
 
+    # List of waypoints for the end-effector to go through. Use to plan cartesian path.
+    waypoints = []
+    # Add start point
+    waypoints.append(ROBOT_STATE.left_arm.get_current_pose().pose)
+
+    # 
+    x_dist = wend[0] - wstart[0]
+    y_dist = wend[1] - wstart[1]
+    z_dist = wend[2] - wstart[2]
+    euclid_dist = math.sqrt(x_dist**2 + y_dist**2 + z_dist**2)
+    num_waypoints = euclid_dist/0.1
+    dx = x_dist/num_waypoints
+    dy = y_dist/num_waypoints
+    dz = z_dist/num_waypoints
+
+    wpose = geometry_msgs.msg.Pose()
+    wpose.orientation.w = 1.0
+    wpose.position.x = waypoints[0].position.x
+    wpose.position.y = waypoints[0].position.y
+    wpose.position.z = waypoints[0].position.z
+    for i in range(0, int(num_waypoints)):
+        wpose.position.x += dx
+        wpose.position.y += dy
+        wpose.position.z += dz
+        waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x = wend[0]
+    wpose.position.y = wend[1]
+    wpose.position.z = wend[2]
+
+    # Add end point
+    (plan3, fraction) = ROBOT_STATE.left_arm.compute_cartesian_path(waypoints, 0.1, 0.0)
+
+def move_to_start(start):
+    #Start pose ------------------------------------------------------
+    start_position = PoseStamped()
+    start_position.header.frame_id = "base"
+
+    #x, y, and z position
+    start_position.pose.position.x = pos1[0]
+    start_position.pose.position.y = pos1[1]
+    start_position.pose.position.z = pos1[2]
+    
+    #Orientation as a quaternion
+    start_position.pose.orientation.x = 0.0
+    start_position.pose.orientation.y = -1.0
+    start_position.pose.orientation.z = 0.0
+    start_position.pose.orientation.w = 0.0
+
+    #Set the goal state to the pose you just defined
+    ROBOT_STATE.left_arm.set_pose_target(start_position)
+
+    #Set the start state for the left arm
+    ROBOT_STATE.left_arm.set_start_state_to_current_state()
+
+    #Plan a path
+    left_plan = ROBOT_STATE.left_arm.plan()
+
+    #Execute the plan
+    ROBOT_STATE.left_arm.execute(left_plan)
 
 def bring_up():
     """
