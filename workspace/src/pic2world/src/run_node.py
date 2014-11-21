@@ -49,27 +49,27 @@ def init_subscribers(matrix_pub):
 
 def calculate_tf_matrix(output_frame):
     try:
-        trans, rot = tf_listener.lookupTransform('/ar_pose_marker_0', output_frame, rospy.Time(0))
+        trans, rot = tf_listener.lookupTransform('/ar_marker_0', output_frame, rospy.Time(0))
         matrix = tf_listener.fromTranslationRotation(trans, rot)
-        xax = matrix.dot(X_AXIS)
-        yax = matrix.dot(Y_AXIS)
-        offset = matrix.dot(ORIGIN)
+        xax = matrix.dot(X_AXIS)[0:3]
+        yax = matrix.dot(Y_AXIS)[0:3]
+        offset = matrix.dot(ORIGIN)[0:3]
 
         proj = np.eye(3, dtype=np.float32)
         # Compute projection. Have the position and orientation of upper
         # left corner
         X_PAPER_SCALE = 11.5/100
-        Y_PAPER_SCALE = 8/100
-        proj[:,0] = xax[0:3]*X_PAPER_SCALE
-        proj[:,1] = yax[0:3]*Y_PAPER_SCALE
-        proj[:,2] = offset[0:3]
+        Y_PAPER_SCALE = 8.0/100
+        proj[:,0] = xax*X_PAPER_SCALE
+        proj[:,1] = yax*Y_PAPER_SCALE
+        proj[:,2] = offset
 
         #Compress to a 3x3 array because you can only publish 1D arrays
         to_publish = proj.reshape(9)
-        pub.publish(to_publish)
+        matrix_pub.publish(to_publish)
 
-    except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-        continue
+    except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
+        return
 
 
 def main(args):
