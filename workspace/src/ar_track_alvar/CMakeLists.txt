@@ -11,24 +11,29 @@ find_package(catkin COMPONENTS
         genmsg
         roscpp
         tf
+        tf2
         image_transport
         resource_retriever
         cv_bridge
         pcl_ros
+        pcl_conversions
         message_generation
         ${MSG_DEPS}
+        dynamic_reconfigure
+        cmake_modules
         REQUIRED)
 
 find_package(Eigen REQUIRED)
 find_package(OpenCV REQUIRED)
-
-find_package(PkgConfig)
-pkg_check_modules(PC_TINYXML REQUIRED tinyxml)
+find_package(TinyXML REQUIRED)
 
 # generate messages
 set(MSG_FILES AlvarMarker.msg AlvarMarkers.msg)
 add_message_files(DIRECTORY msg FILES ${MSG_FILES})
 generate_messages(DEPENDENCIES ${MSG_DEPS})
+
+# dynamic reconfigure support
+generate_dynamic_reconfigure_options(cfg/Params.cfg)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -37,6 +42,7 @@ catkin_package(
         std_msgs
         roscpp
         tf
+        tf2
         message_runtime
         image_transport
         sensor_msgs
@@ -45,13 +51,14 @@ catkin_package(
         resource_retriever
         cv_bridge
         pcl_ros
+        pcl_conversions
+        dynamic_reconfigure
 )
 
 include_directories(include 
-                    ${PC_TINYXML_INCLUDE_DIRS}
                     ${catkin_INCLUDE_DIRS}
                     ${OpenCV_INCLUDE_DIRS}
-                    ${PC_TINYXML_INCLUDE_DIRS}
+                    ${TinyXML_INCLUDE_DIRS}
 
 )
 
@@ -88,7 +95,7 @@ add_library(ar_track_alvar
     src/MultiMarker.cpp
     src/MultiMarkerBundle.cpp
     src/MultiMarkerInitializer.cpp)
-target_link_libraries(ar_track_alvar ${OpenCV_LIBS} tinyxml ${catkin_LIBRARIES})
+target_link_libraries(ar_track_alvar ${OpenCV_LIBS} ${TinyXML_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(ar_track_alvar ${GENCPP_DEPS})
 
 # Kinect filtering code
@@ -99,7 +106,7 @@ target_link_libraries(kinect_filtering ${catkin_LIBRARIES})
 add_dependencies(kinect_filtering ${GENCPP_DEPS})
 
 add_library(medianFilter src/medianFilter.cpp)
-target_link_libraries(medianFilter ${catkin_LIBRARIES})
+target_link_libraries(medianFilter ar_track_alvar ${catkin_LIBRARIES})
 add_dependencies(medianFilter ${GENCPP_DEPS})
 
 set(ALVAR_TARGETS ar_track_alvar individualMarkers individualMarkersNoKinect trainMarkerBundle findMarkerBundles findMarkerBundlesNoKinect createMarker ar_track_alvar)
