@@ -16,7 +16,7 @@ ORIGIN = np.array([0,0,0,1])
 
 TOPIC_NAME = 'renoir/pic2world'
 POSE_TOPIC = '/ar_pose_marker'
-BAXTER_BASE_DEFAULT_FRAME = '/usb_cam'
+#BAXTER_BASE_DEFAULT_FRAME = '/usb_cam'
 
 matrix_pub = None
 tf_listener = None
@@ -74,10 +74,11 @@ def calculate_tf_matrix(output_frame):
 
 def main(args):
     global matrix_pub, tf_listener
-    if len(args) == 1:
-        output_frame = args[0]
+    if len(args) >= 2:
+        output_frame = args[1]
     else:
-        output_frame = BAXTER_BASE_DEFAULT_FRAME
+        raise RuntimeException("Invalid args. Need to specify output frame:"+str(args))
+    print "[pic2world] Starting publisher. Output frame:"+output_frame
     rospy.init_node('pic2world_node')
     matrix_pub = rospy.Publisher(TOPIC_NAME, numpy_msg(Floats))
     tf_listener = listener = tf.TransformListener()
