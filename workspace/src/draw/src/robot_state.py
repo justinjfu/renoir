@@ -12,7 +12,7 @@ class RobotState(object):
         self.__subscribe()
         self.__publish()
         self.is_hand_down = False
-        self.is_moveit_initialized = False
+        self.__init_moveit()
 
     def __init_moveit(self):
 	"""
@@ -40,9 +40,6 @@ class RobotState(object):
     	self.left_arm = moveit_commander.MoveGroupCommander('left_arm')
     	self.left_arm.set_planner_id('RRTConnectkConfigDefault')
     	self.left_arm.set_planning_time(10)
-
-        #Set flag that its initialized
-        self.is_moveit_initialized = True
 
     def __subscribe(self):
         """
