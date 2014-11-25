@@ -6,27 +6,31 @@ import sys
 import rospy
 import numpy as np
 import moveit_commander
+from baxter_interface import gripper as baxter_gripper
+from moveit_msgs.msg import OrientationConstraint, Constraints
+from geometry_msgs.msg import PoseStamped
+
 
 class RobotState(object):
     def __init__(self):
-        self.__subscribe()
-        self.__publish()
-        self.is_hand_down = False
+        pass       
+
+    def init(self):
+        # self.__subscribe()
+        # self.__publish()
+        # self.is_hand_down = False
         self.__init_moveit()
 
     def __init_moveit(self):
-	"""
-	"""
-    	if (self.is_moveit_initialized):
-            return
-
+        print "initilizing"
         #Initialize moveit_commander
     	moveit_commander.roscpp_initialize(sys.argv)
 
-    	#Start a node
-    	rospy.init_node('moveit_node')
+    	print "node"
+        #Start a node
     
-    	#Set up the left gripper
+    	print "left_gripper"
+        #Set up the left gripper
     	left_gripper = baxter_gripper.Gripper('left')
     
     	#Calibrate the gripper
@@ -69,10 +73,10 @@ class RobotState(object):
         """
         return self.pic2world_transform
 
-    def set_hand_down():
+    def set_hand_down(self):
         self.is_hand_down = True
 
-    def set_hand_up():
+    def set_hand_up(self):
         self.is_hand_down = False
 
 ROBOT_STATE = RobotState()

@@ -93,33 +93,47 @@ def bring_up():
 
     ROBOT_STATE.set_hand_up()
 
-def bring_down(target_point):
+def bring_down_world(world_point):
     """
     move hand to initial point to start drawing from
 
     :param target_point: A 2D image frame point [x1, y1]
     """
-    if ROBOT_STATE.is_hand_down:
-        raise RuntimeException("Robot hand already down! Need to call bring_up first")
+    # if ROBOT_STATE.is_hand_down:
+    #     raise RuntimeException("Robot hand already down! Need to call bring_up first")
 
-    # Bring hand down via MoveIt
-    target_point = pic2world(target_point)
+    # # Bring hand down via MoveIt
+    # target_point = pic2world(target_point)
+
+    # #Start pose ------------------------------------------------------
+    # start_position = PoseStamped()
+    # start_position.header.frame_id = "base"
+
+    # #x, y, and z position
+    # start_position.pose.position.x = target_point[0]
+    # start_position.pose.position.y = target_point[1]
+    # start_position.pose.position.z = target_point[2]
+    
+    # #Orientation as a quaternion
+    # start_position.pose.orientation.x = 0.0
+    # start_position.pose.orientation.y = -1.0
+    # start_position.pose.orientation.z = 0.0
+    # start_position.pose.orientation.w = 0.0
 
     #Start pose ------------------------------------------------------
     start_position = PoseStamped()
     start_position.header.frame_id = "base"
 
     #x, y, and z position
-    start_position.pose.position.x = target_point[0]
-    start_position.pose.position.y = target_point[1]
-    start_position.pose.position.z = target_point[2]
+    start_position.pose.position.x = world_point[0]
+    start_position.pose.position.y = world_point[1]
+    start_position.pose.position.z = world_point[2]
     
     #Orientation as a quaternion
-    start_position.pose.orientation.x = 0.0
-    start_position.pose.orientation.y = -1.0
+    start_position.pose.orientation.x = 0.990
+    start_position.pose.orientation.y = -0.139
     start_position.pose.orientation.z = 0.0
     start_position.pose.orientation.w = 0.0
-
     #Set the goal state to the pose you just defined
     ROBOT_STATE.left_arm.set_pose_target(start_position)
 
@@ -170,5 +184,3 @@ def pic2world_list(point_list):
     for i in range(len(point_list)):
         new_list[i] = pic2world(point_list[i])
     return new_list
-
-
