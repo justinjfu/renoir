@@ -18,7 +18,7 @@ class RobotState(object):
     def init(self):
         # self.__subscribe()
         # self.__publish()
-        # self.is_hand_down = False
+        self.is_hand_down = False
         self.__init_moveit()
 
     def __init_moveit(self):
@@ -34,9 +34,9 @@ class RobotState(object):
     	left_gripper = baxter_gripper.Gripper('left')
     
     	#Calibrate the gripper
-    	print('Calibrating...')
-    	left_gripper.calibrate()
-    	rospy.sleep(2.0)
+    	# print('Calibrating...')
+    	# left_gripper.calibrate()
+    	# rospy.sleep(2.0)
 	
     	#Initialize left arm
     	self.robot = moveit_commander.RobotCommander()

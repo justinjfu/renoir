@@ -8,6 +8,7 @@ import rospy
 from robot_state import ROBOT_STATE
 import moveit_commander
 from moveit_msgs.msg import OrientationConstraint, Constraints
+import geometry_msgs.msg
 from geometry_msgs.msg import PoseStamped
 
 def draw_line(line_segment):
@@ -61,17 +62,21 @@ def bring_up():
     raise hand 2 inches from current point
     """
     # Bring hand up 5 centimeters
-    if ROBOT_STATE.is_hand_up:
+    if not ROBOT_STATE.is_hand_down:
         raise RuntimeException("Robot hand already up!")
     
+    current_pose = geometry_msgs.msg.Pose()
     current_pose = ROBOT_STATE.left_arm.get_current_pose().pose
+    print "current_pose"
+    print current_pose.position
+    print current_pose.orientation
     
     desired_pose = PoseStamped()
     desired_pose.header.frame_id = "base"
 
     desired_pose.pose.position.x = current_pose.position.x
     desired_pose.pose.position.y = current_pose.position.y
-    desired_pose.pose.position.z = current_pose.position.z + 0.05
+    desired_pose.pose.position.z = current_pose.position.z
     
     #Orientation as a quaternion
     desired_pose.pose.orientation.x = current_pose.orientation.x
@@ -79,6 +84,9 @@ def bring_up():
     desired_pose.pose.orientation.z = current_pose.orientation.z
     desired_pose.pose.orientation.w = current_pose.orientation.w
 
+    print "desired_pose"
+    print desired_pose.pose.position
+    print desired_pose.pose.orientation
     #Set the goal state to the pose you just defined
     ROBOT_STATE.left_arm.set_pose_target(desired_pose)
 
@@ -89,7 +97,8 @@ def bring_up():
     up_plan = ROBOT_STATE.left_arm.plan()
 
     #Execute the plan
-    ROBOT_STATE.left_arm.execute(up_plan)
+    print "Executing bring_up"
+    # ROBOT_STATE.left_arm.execute(up_plan) #Not sure why but the desired pose is all the way extended
 
     ROBOT_STATE.set_hand_up()
 
@@ -104,21 +113,6 @@ def bring_down_world(world_point):
 
     # # Bring hand down via MoveIt
     # target_point = pic2world(target_point)
-
-    # #Start pose ------------------------------------------------------
-    # start_position = PoseStamped()
-    # start_position.header.frame_id = "base"
-
-    # #x, y, and z position
-    # start_position.pose.position.x = target_point[0]
-    # start_position.pose.position.y = target_point[1]
-    # start_position.pose.position.z = target_point[2]
-    
-    # #Orientation as a quaternion
-    # start_position.pose.orientation.x = 0.0
-    # start_position.pose.orientation.y = -1.0
-    # start_position.pose.orientation.z = 0.0
-    # start_position.pose.orientation.w = 0.0
 
     #Start pose ------------------------------------------------------
     start_position = PoseStamped()
@@ -144,7 +138,10 @@ def bring_down_world(world_point):
     left_plan = ROBOT_STATE.left_arm.plan()
 
     #Execute the plan
+    print "Executing bring_down_world"
     ROBOT_STATE.left_arm.execute(left_plan)
+    print ROBOT_STATE.left_arm.get_current_pose().pose.position
+    print ROBOT_STATE.left_arm.get_current_pose().pose.orientation
 
     ROBOT_STATE.set_hand_down()
 
