@@ -112,25 +112,25 @@ def move_group_python_interface_tutorial():
   ## ^^^^^^^^^^^^^^^^^^^^^^^
   ## We can plan a motion for this group to a desired pose for the 
   ## end-effector
-  print "============ Generating plan 1"
-  pose_target = geometry_msgs.msg.Pose()
-  pose_target.orientation.w = 0.0
-  pose_target.position.x = 0.2
-  pose_target.position.y = 0.6
-  pose_target.position.z = 0.2
-  group.set_pose_target(pose_target)
+  # print "============ Generating plan 1"
+  # pose_target = geometry_msgs.msg.Pose()
+  # pose_target.orientation.w = 0.0
+  # pose_target.position.x = 0.2
+  # pose_target.position.y = 0.6
+  # pose_target.position.z = 0.2
+  # group.set_pose_target(pose_target)
 
-  ## Now, we call the planner to compute the plan
-  ## and visualize it if successful
-  ## Note that we are just planning, not asking move_group 
-  ## to actually move the robot
-  plan1 = group.plan()
+  # ## Now, we call the planner to compute the plan
+  # ## and visualize it if successful
+  # ## Note that we are just planning, not asking move_group 
+  # ## to actually move the robot
+  # plan1 = group.plan()
 
-  print "============ Waiting while RVIZ displays plan1..."
-  rospy.sleep(5)
+  # print "============ Waiting while RVIZ displays plan1..."
+  # rospy.sleep(5)
 
-  # Uncomment below line when working with a real robot
-  group.go(wait=True)
+  # # Uncomment below line when working with a real robot
+  # group.go(wait=True)
 
  
   # You can ask RVIZ to visualize a plan (aka trajectory) for you.  But the
@@ -220,7 +220,7 @@ def move_group_python_interface_tutorial():
                                
   print "============ Waiting while RVIZ displays plan3..."
   rospy.sleep(5)
-
+  group.go(wait=True)
  
   ## Adding/Removing Objects and Attaching/Detaching Objects
   ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
