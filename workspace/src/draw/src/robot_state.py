@@ -16,8 +16,8 @@ class RobotState(object):
         pass       
 
     def init(self):
-        # self.__subscribe()
-        # self.__publish()
+        self.__subscribe()
+        self.__publish()
         self.is_hand_down = False
         self.__init_moveit()
 
