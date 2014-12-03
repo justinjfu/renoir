@@ -16,8 +16,10 @@ class RobotState(object):
         pass       
 
     def init(self):
-        self.__subscribe()
-        self.__publish()
+        # self.__subscribe()
+        # self.__publish()
+        self.position = [0, 0, 0]
+        self.orientation = [0.990, -0.139, 0, 0]
         self.is_hand_down = False
         self.__init_moveit()
 

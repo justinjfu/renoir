@@ -12,8 +12,9 @@ def main():
 
     # r = rospy.Rate(10) #10Hz
 
-    world_point = [0.536, 0.245, -0.180]
+    world_point = [0.536, 0.245, -0.080]
     draw_path.bring_down_world(world_point)
+    draw_path.draw_line([world_point, [0.636, 0.345, -0.080]])
     draw_path.bring_up()
 
     # while not rospy.is_shutdown():
