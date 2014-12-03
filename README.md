@@ -8,20 +8,33 @@ Tasks
 ------
 * (Hojo) Hardware
   * Spring-loaded gripping thingy
-* (Sara) Vectors to robot actions
+* (DONE) Vectors to robot actions
   * Start with manually specified trajectories - Have baxter draw from a list of line segments
     * Have an algorithm to specify in which order lines are drawn in
     * Feed lines into MoveIt
   * Have a hard-coded picture to world transformation
-* (Justin) Paper tracking
+* (DONE) Paper tracking
   * Calculate picture frame to world frame transformation. This can be a service that publishes a picture-to-world transformation matrix.
   * Corner detection (we can use 3/4 AR tags)
   * Kalman Filter
-* [Stretch] (Justin) Image Vectorizer 
-  * Converts bitmap images to a list of line segments
-* [Stretch] Feedback
-  * Have Baxter know which lines are one the paper  
+* Actual drawing
+  * Idea 1 : Preload an alphabet, have baxter write
+  * Idea 2 : Given a bitmap image, just trace the pixels
+  * Idea 3 : Image Vectorizer?
+   * Converts bitmap images to a list of line segments
 
+How to Run (Currently)
+======
+ALL CODE IS ON THE baxter BRANCH
+1) Set up pic2world transforms
+*  rosrun pic2world fix_baxter_cam.sh
+*  roslaunch pic2world baxter_single.sh
+
+2) Setup movit
+* roslaunch draw draw_rviz.launch
+
+3) Run code (currently draws a traingle)
+* rosrun draw run.py
 
 Git Help
 ======
