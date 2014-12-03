@@ -9,6 +9,7 @@ import moveit_commander
 from baxter_interface import gripper as baxter_gripper
 from moveit_msgs.msg import OrientationConstraint, Constraints
 from geometry_msgs.msg import PoseStamped
+from rospy_tutorials.msg import Floats
 
 
 class RobotState(object):
@@ -16,7 +17,7 @@ class RobotState(object):
         pass       
 
     def init(self):
-        # self.__subscribe()
+        self.__subscribe()
         # self.__publish()
         self.position = [0, 0, 0]
         self.orientation = [0.990, -0.139, 0, 0]
@@ -51,26 +52,21 @@ class RobotState(object):
         """
         Initialize all subscribers
         """
-        self.pic2world_sub = rospy.Subscriber('renoir/pic2world', lambda msg: self.__pic2world_callback(self))
+        self.pic2world_sub = rospy.Subscriber('renoir/pic2world', Floats, lambda msg: self.__pic2world_callback(msg))
 
     def __publish(self):
         """
         Initialize all publishers.
         """
-        # Create DisplayTrajectory publishes trajectories for RVIZ
-        display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory)
-        # wait for RVIZ to visualize
-        print "============ Waiting for RVIZ..."
-        rospy.sleep(10)
-        print "============ RVIZ started"
+        pass
 
     def __pic2world_callback(self, msg):
-        self.pic2world_transform = msg.data.reshape((3,3))
+        self.pic2world_transform = np.array(msg.data).reshape((3,3))
 
     def getPic2World(self):
         """
         Return the latest picture to world frame transformation matrix.
-        This is a 3x2 matrix which brings picture frame coordinates (2D) to world
+        This is a 3x3 matrix which brings picture frame coordinates (2D) to world
         frame coordinates in Baxter's base frame
         """
         return self.pic2world_transform

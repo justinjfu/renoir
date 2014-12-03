@@ -3,7 +3,7 @@
 import sys
 import copy
 import math
-import numpy
+import numpy as np
 import rospy
 from robot_state import ROBOT_STATE
 import moveit_commander
@@ -24,8 +24,10 @@ def draw_line(line_segment):
     # wend = pic2world(line_segment[1])
     wstart = line_segment[0]
     wend = line_segment[1]
+    
     # List of waypoints for the end-effector to go through. Use to plan cartesian path.
     waypoints = []
+    
     # Add start point
     wpose = PoseStamped()
     wpose.header.frame_id = "base"
@@ -38,15 +40,17 @@ def draw_line(line_segment):
     wpose.pose.orientation.w = ROBOT_STATE.orientation[3]
     waypoints.append(copy.deepcopy(wpose.pose))
 
+    # Add end point
     wpose.pose.position.x = wend[0]
     wpose.pose.position.y = wend[1]
     wpose.pose.position.z = wend[2]
     waypoints.append(copy.deepcopy(wpose.pose))
 
-    # Add end point
+    print "Executing draw_line"
     (plan3, fraction) = ROBOT_STATE.left_arm.compute_cartesian_path(waypoints, 0.01, 0.0)
     ROBOT_STATE.left_arm.execute(plan3)
     ROBOT_STATE.position = wend
+
 def bring_up():
     """
     raise hand 2 inches from current point
@@ -137,9 +141,6 @@ def bring_down_world(world_point):
     ROBOT_STATE.left_arm.execute(left_plan)
 
     ROBOT_STATE.position = world_point
-    
-    print ROBOT_STATE.left_arm.get_current_pose().pose.position
-    print ROBOT_STATE.left_arm.get_current_pose().pose.orientation
 
     ROBOT_STATE.set_hand_down()
 
@@ -168,7 +169,9 @@ def pic2world(single_point):
     """
     transform = ROBOT_STATE.getPic2World()
     homog = np.array([single_point[0], single_point[1], 1])
-    return transform.dot(homog)
+    result = transform.dot(homog)
+    result[2] += 0.05
+    return result
 
 def pic2world_list(point_list):
     """
