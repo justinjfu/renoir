@@ -8,7 +8,7 @@ from robot_state import ROBOT_STATE
 
 
 def main():
-   
+    #git test
     signature = 'RENOIR'
     alpha = {
     'A' : [[[10, 1], [0,5]], [[0,5], [10, 9]], [[5, 3], [5, 7]]], 
