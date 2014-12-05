@@ -35,14 +35,16 @@ def picture_plan(waypoints_list):
 
 POKE = 'pokeball.png'
 CART = 'cartman.jpg'
+CAL = 'cal.jpg'
 PARAMS = {
   POKE: {'scan_range':2, 'K':0.0, 'thresh':150},
   CART: {'scan_range':3, 'K':1.0, 'thresh':130},
+  CAL: {'scan_range':1, 'K':0.0, 'thresh':150},
 }
 def main():
     #rospy.init_node('drawpath_node')
     #ROBOT_STATE.init()
-    img_id = CART
+    img_id = CAL
 
     img = read_image(img_id, show=True, thresh=PARAMS[img_id]['thresh'])
     img_cpy = np.copy(img)
