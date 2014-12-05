@@ -178,7 +178,4 @@ def pic2world_list(point_list):
     Convert a list of picture frame coordinates ( a 2-element numpy array)
     to a 3D world coordinate
     """
-    new_list = [None]*len(point_list)
-    for i in range(len(point_list)):
-        new_list[i] = pic2world(point_list[i])
-    return new_list
+    return [pic2world(point) for point in point_list]
