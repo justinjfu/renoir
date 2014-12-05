@@ -51,6 +51,37 @@ def draw_line(line_segment):
     ROBOT_STATE.left_arm.execute(plan3)
     ROBOT_STATE.position = wend
 
+def draw_waypoints(line_segments):
+    """
+    Make baxter draw a line segment
+     
+    :param line_segment: A list of points to draw through. Ex. [[x1, y1], [x2, y2], [x3,y3, ...]]
+    """
+    assert ROBOT_STATE.is_hand_down  #Make sure robot hand is down
+
+    # List of waypoints for the end-effector to go through. Use to plan cartesian path.
+    waypoints = []
+    
+    # Add start point
+    wpose = PoseStamped()
+    wpose.header.frame_id = "base"
+    wpose.pose.orientation.x = ROBOT_STATE.orientation[0]
+    wpose.pose.orientation.y = ROBOT_STATE.orientation[1]
+    wpose.pose.orientation.z = ROBOT_STATE.orientation[2]
+    wpose.pose.orientation.w = ROBOT_STATE.orientation[3]
+
+    for pic_point in line_segments:
+        wpoint = pic2world(pic_point)
+        wpose.pose.position.x = wpoint[0]
+        wpose.pose.position.y = wpoint[1]
+        wpose.pose.position.z = wpoint[2]
+        waypoints.append(copy.deepcopy(wpose.pose))
+
+    print "Executing draw_waypoints"
+    (plan3, fraction) = ROBOT_STATE.left_arm.compute_cartesian_path(waypoints, 0.01, 0.0)
+    ROBOT_STATE.left_arm.execute(plan3)
+    ROBOT_STATE.position = wend
+
 def bring_up():
     """
     raise hand 2 inches from current point
@@ -179,3 +210,4 @@ def pic2world_list(point_list):
     to a 3D world coordinate
     """
     return [pic2world(point) for point in point_list]
+

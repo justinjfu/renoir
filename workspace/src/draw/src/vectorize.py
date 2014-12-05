@@ -3,6 +3,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import argparse
+import scipy.misc as spm
 
 def __parse_args():
     arg_parser = argparse.ArgumentParser(description="Image vectorizer")
@@ -19,7 +20,6 @@ def dist(p1, p2):
     return np.sqrt(np.dot(diff,diff))
 
 def read_image(filename, show=True, thresh = 120):
-    import scipy.misc as spm
     #import pdb;pdb.set_trace()
     img = spm.imread(filename, flatten = True)
     #img = spm.lena()
@@ -147,6 +147,9 @@ def remove_single(segment_iter):
     if last_segment:
         yield last_segment
 
+def filtered_segments(img, params):
+    return filter_lifts(remove_single(generate_segments(img, params)))
+
 def test():
     img = np.zeros((5,5))
     for i in range(5):
@@ -155,7 +158,7 @@ def test():
 
     img = read_image('cartman.jpg', show=True)
 
-    for segment in filter_lifts(remove_single(generate_segments(img, {'scan_range':2}))):
+    for segment in filtered_segments(img, {'scan_range':2}):
         print segment
 
 def main():
