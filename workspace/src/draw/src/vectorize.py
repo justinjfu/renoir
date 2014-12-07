@@ -104,13 +104,14 @@ def generate_segments(pic, params):
     Objects in an iterator can either be a list of 2 points [[x1,y1],[x2,y2]] or an instance of LIFT
     """
     scan_range = params.get('scan_range', 2)
+    momentum_K = params.get('K', 30.0)
     pic = np.copy(pic) #don't modify original
     while np.sum(pic) != 0:
         point = select_initial(pic)
         prev_point = None
         pic[point[0],point[1]] = 0
         while True:
-            next_point = scan_neighbors(pic, point, score_momentum(point, prev_point, K=30.0), scan_range=scan_range)
+            next_point = scan_neighbors(pic, point, score_momentum(point, prev_point, K=momentum_K), scan_range=scan_range)
             if next_point is not None:
                 yield [point, next_point]
                 prev_point = point
@@ -158,7 +159,7 @@ def test():
 
     img = read_image('cartman.jpg', show=True)
 
-    for segment in filtered_segments(img, {'scan_range':2}):
+    for segment in filtered_segments(img, {'scan_range':2, 'K':1.0}):
         print segment
 
 def main():
