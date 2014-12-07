@@ -70,8 +70,10 @@ def draw_waypoints(line_segments):
     wpose.pose.orientation.z = ROBOT_STATE.orientation[2]
     wpose.pose.orientation.w = ROBOT_STATE.orientation[3]
 
-    for pic_point in line_segments:
-        wpoint = pic2world(pic_point)
+    for i in range(len(line_segments)):
+        line_segments[i] = pic2world(line_segments[i])
+
+    for wpoint in line_segments:
         wpose.pose.position.x = wpoint[0]
         wpose.pose.position.y = wpoint[1]
         wpose.pose.position.z = wpoint[2]
