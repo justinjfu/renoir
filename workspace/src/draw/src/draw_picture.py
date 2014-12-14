@@ -2,9 +2,9 @@
 """
 Driver script
  """
-#import rospy
-#import draw_path
-#from robot_state import ROBOT_STATE
+import rospy
+import draw_path
+from robot_state import ROBOT_STATE
 from vectorize import filtered_segments, read_image, LIFT
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,25 +26,27 @@ def get_waypoints(img, params):
               waypoints.append(seg[1])
 
 def picture_plan(waypoints_list):
+    draw_path.bring_down(waypoints_list[0])
+    draw_path.draw_waypoints(waypoints_list)
     draw_path.bring_up()
-    for waypts in waypoints_list:
-        draw_path.bring_down(waypts[0])
-        draw_path.draw_waypoints(waypts)
-        draw_path.bring_up()
 
 
 POKE = 'pokeball.png'
 CART = 'cartman.jpg'
 CAL = 'cal.jpg'
+TREE = 'tree.jpg'
+LETA = 'a.jpg'
 PARAMS = {
   POKE: {'scan_range':2, 'K':0.0, 'thresh':150},
   CART: {'scan_range':3, 'K':1.0, 'thresh':130},
   CAL: {'scan_range':1, 'K':0.0, 'thresh':150},
+  TREE: {'scan_range':4, 'K':0.0, 'thresh':150},
+  LETA: {'scan_range':5, 'K':0.0, 'thresh':150}
 }
 def main():
-    #rospy.init_node('drawpath_node')
-    #ROBOT_STATE.init()
-    img_id = CAL
+    rospy.init_node('drawpath_node')
+    ROBOT_STATE.init()
+    img_id = LETA
 
     img = read_image(img_id, show=True, thresh=PARAMS[img_id]['thresh'])
     img_cpy = np.copy(img)
@@ -57,8 +59,9 @@ def main():
             img_cpy[pt[0],pt[1]]=0
         plt.imshow(img_cpy, interpolation='nearest', cmap='Greys')    
         plt.show()
-          
-    #picture_plan(waypoints)
+        picture_plan(wp)
+        print "here1"
+
 
 if __name__ == "__main__":
     main()

@@ -70,10 +70,8 @@ def draw_waypoints(line_segments):
     wpose.pose.orientation.z = ROBOT_STATE.orientation[2]
     wpose.pose.orientation.w = ROBOT_STATE.orientation[3]
 
-    for i in range(len(line_segments)):
-        line_segments[i] = pic2world(line_segments[i])
-
-    for wpoint in line_segments:
+    for pic_point in line_segments:
+        wpoint = pic2world(pic_point)
         wpose.pose.position.x = wpoint[0]
         wpose.pose.position.y = wpoint[1]
         wpose.pose.position.z = wpoint[2]
@@ -82,21 +80,21 @@ def draw_waypoints(line_segments):
     print "Executing draw_waypoints"
     (plan3, fraction) = ROBOT_STATE.left_arm.compute_cartesian_path(waypoints, 0.01, 0.0)
     ROBOT_STATE.left_arm.execute(plan3)
-    ROBOT_STATE.position = wend
+    ROBOT_STATE.position = wpoint
 
 def bring_up():
     """
     raise hand 2 inches from current point
     """
     # Bring hand up 5 centimeters
-    if not ROBOT_STATE.is_hand_down:
-        raise RuntimeException("Robot hand already up!")
+    # if not ROBOT_STATE.is_hand_down:
+    #     raise RuntimeException("Robot hand already up!")
     
     current_pose = geometry_msgs.msg.Pose()
     current_pose = ROBOT_STATE.left_arm.get_current_pose().pose
     print "current_pose"
-    print current_pose.position
-    print current_pose.orientation
+    # print current_pose.position
+    # print current_pose.orientation
     
     desired_pose = PoseStamped()
     desired_pose.header.frame_id = "base"
@@ -111,9 +109,9 @@ def bring_up():
     desired_pose.pose.orientation.z = ROBOT_STATE.orientation[2]
     desired_pose.pose.orientation.w = ROBOT_STATE.orientation[3]
 
-    print "desired_pose"
-    print desired_pose.pose.position
-    print desired_pose.pose.orientation
+    # print "desired_pose"
+    # print desired_pose.pose.position
+    # print desired_pose.pose.orientation
     #Set the goal state to the pose you just defined
     ROBOT_STATE.left_arm.set_pose_target(desired_pose)
 
@@ -127,12 +125,16 @@ def bring_up():
 
     #Execute the plan
     print "Executing bring_up"
-    ROBOT_STATE.left_arm.execute(up_plan) #Not sure why but the desired pose is all the way extended
+    ROBOT_STATE.left_arm.execute(up_plan)
 
     ROBOT_STATE.position[2] += 0.2
     ROBOT_STATE.set_hand_up()
-    print desired_pose.pose.position
-    print desired_pose.pose.orientation
+    # print desired_pose.pose.position
+    # print desired_pose.pose.orientation
+
+def bring_down(pic_point):
+    world_point = pic2world(pic_point)
+    bring_down_world(world_point)
 
 def bring_down_world(world_point):
     """
@@ -203,7 +205,8 @@ def pic2world(single_point):
     transform = ROBOT_STATE.getPic2World()
     homog = np.array([single_point[0], single_point[1], 1])
     result = transform.dot(homog)
-    result[2] += 0.05
+    result[2] += 0.0202
+
     return result
 
 def pic2world_list(point_list):

@@ -58,8 +58,8 @@ def calculate_tf_matrix(output_frame):
         proj = np.eye(3, dtype=np.float32)
         # Compute projection. Have the position and orientation of upper
         # left corner
-        X_PAPER_SCALE = .292/100
-        Y_PAPER_SCALE = .2032/100
+        X_PAPER_SCALE = .2032/150 #.292/100
+        Y_PAPER_SCALE = .2032/150
         proj[:,0] = xax*X_PAPER_SCALE
         proj[:,1] = yax*Y_PAPER_SCALE
         proj[:,2] = offset
