@@ -63,14 +63,14 @@ def main():
     #Second goal pose -----------------------------------------------------
     rospy.sleep(2.0)  
     #Close the left gripper
-    print('Closing...')
-    left_gripper.close(block=True)
-    rospy.sleep(0.5)
+    #print('Closing...')
+    #left_gripper.close(block=True)
+    #rospy.sleep(0.5)
 
     #Open the left gripper
-    print('Opening...')
-    left_gripper.open(block=True)
-    rospy.sleep(1.0)
+    #print('Opening...')
+    #left_gripper.open(block=True)
+    #rospy.sleep(1.0)
     print('Done!')        
     goal_2 = PoseStamped()
     goal_2.header.frame_id = "base"
@@ -117,15 +117,15 @@ def main():
     #Third goal pose -----------------------------------------------------
     rospy.sleep(2.0)    
     #Close the left gripper
-    print('Closing...')
-    left_gripper.close(block=True)
-    rospy.sleep(0.5)
+    #print('Closing...')
+    #left_gripper.close(block=True)
+    #rospy.sleep(0.5)
 
     #Open the left gripper
-    print('Opening...')
-    left_gripper.open(block=True)
-    rospy.sleep(1.0)
-    print('Done!')    
+    #print('Opening...')
+    #left_gripper.open(block=True)
+    #rospy.sleep(1.0)
+    #print('Done!')    
     goal_3 = PoseStamped()
     goal_3.header.frame_id = "base"
 
@@ -170,15 +170,15 @@ def main():
     #Fourth goal pose -----------------------------------------------------
     rospy.sleep(2.0)    
     #Close the left gripper
-    print('Closing...')
-    left_gripper.close(block=True)
-    rospy.sleep(0.5)
+    #print('Closing...')
+    #left_gripper.close(block=True)
+    #rospy.sleep(0.5)
 
     #Open the left gripper
-    print('Opening...')
-    left_gripper.open(block=True)
-    rospy.sleep(1.0)
-    print('Done!')
+    #print('Opening...')
+    #left_gripper.open(block=True)
+    #rospy.sleep(1.0)
+    #print('Done!')
     goal_4 = PoseStamped()
     goal_4.header.frame_id = "base"
 
